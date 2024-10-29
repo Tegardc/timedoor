@@ -14,8 +14,8 @@ export default {
     setNewRecipe(state, payload) {
       state.recipes.push(payload);
     },
-    setRecipeData(state, payload) {
-      state.recipes = payload;
+    setRecipeData(state, recipes) {
+      state.recipes = recipes;
     },
     // setRecipeDetail(state, payload) {
     //   state.recipeDetail = payload;
@@ -40,7 +40,7 @@ export default {
           updatedRecipe
           // username: rootState.auth.userLogin.username
         );
-        await dispatch("getRecipeData");
+        dispatch("getRecipeData");
       } catch (error) {
         console.log(error);
       }
@@ -94,7 +94,10 @@ export default {
           `https://vue-js-project-351d2-default-rtdb.firebaseio.com/recipes/${payload}.json`
         );
         commit("setRecipeDetail", data);
+        return data;
       } catch (error) {
+        console.log(data);
+        z;
         console.log("Recipe Detail", error);
       }
     },

@@ -22,7 +22,7 @@
       <p class="mt-2 mb-4 fs-5 fw-semibold">Recipe</p>
       <div class="row">
         <user-recipe-card
-          v-for="recipe in recipes"
+          v-for="recipe in recipeList"
           :key="recipe.id"
           :recipe="recipe"
           :buttonName="['Delete', 'Edit']"
@@ -44,29 +44,31 @@ import { useStore } from "vuex";
 const store = useStore();
 const router = useRouter();
 // const recipeListStatus = ref(false);
-// const recipeList = ref();
+const recipeList = ref();
 
 const deleteRecipe = async (id) => {
   await store.dispatch("recipe/deleteRecipe", id);
 };
 const editRecipe = async (id) => {
   await store.dispatch("recipe/getRecipeDetail", id);
+  await store.dispatch("recipe/getRecipeData");
   router.push(`/recipe/edit/${id}`);
 };
-const recipes = computed(() => {
-  const allRecipe = store.state.recipe.recipes;
-  const userId = store.state.auth.userLogin.userId;
-  const filtered = allRecipe.filter((recipe) => recipe.userId === userId);
-  return filtered;
-});
 
-// onMounted(async () => {
-//   try {
-//     await store.dispatch("recipe/getRecipeData");
-//     recipeListStatus.value = true;
-//     recipeList.value = store.state.recipe.recipes;
-//   } catch (error) {
-//     console.log(error);
-//   }
+// const recipes = computed(() => {
+//   const allRecipe = store.state.recipe.recipes;
+//   const userId = store.state.auth.userLogin.userId;
+
+//   const filtered = allRecipe.filter((recipe) => recipe.userId === userId);
+//   return filtered;
 // });
+
+onMounted(async () => {
+  try {
+    await store.dispatch("recipe/getRecipeData");
+    recipeList.value = store.state.recipe.recipes;
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
